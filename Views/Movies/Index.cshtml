@@ -1,0 +1,80 @@
+@model List<MovieCatalog.Models.Movie>
+
+<h2 style="font-family: 'Orbitron'; text-align: center; sans-serif; color: #99e6ff; font-weight: bold;">
+    Movie List
+</h2>
+
+<a href="/Movies/Create" class="btn-futuristic">
+    Add New Movie
+</a>
+
+<style>
+    body {
+        font-family: 'Orbitron', sans-serif;
+        color: #e0e0e0;
+    }
+
+    .futuristic-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: rgba(20, 20, 20, 0.95);
+        border: 1px solid #333;
+    }
+
+    .futuristic-table th, 
+    .futuristic-table td {
+        padding: 12px 15px;
+        text-align: center;
+        border: 1px solid #333;
+    }
+
+    .futuristic-table th {
+        background: #1a1a1a;
+        color: #66ccff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .futuristic-table tr {
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .futuristic-table tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .futuristic-table tr:hover {
+        background: rgba(102, 204, 255, 0.15);
+        transform: scale(1.02);
+    }
+</style>
+
+<table class="futuristic-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Director</td>
+                <td>@movie.Genre</td>
+                <td>@movie.Year</td>
+                <td>@movie.Rating</td>
+                <td><a style="font-family: 'Orbitron', sans-serif; font-weight: bold; color: #66ccff;" href="/Movies/Edit/@movie.Id">EDIT</a</td>
+                <td><a style="font-family: 'Orbitron', sans-serif; font-weight: bold; color: #66ccff;" href="/Movies/Delete/@movie.Id">DELETE</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
