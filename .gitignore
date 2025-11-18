@@ -1,0 +1,40 @@
+# Visual Studio / Rider / IDEs
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+*.dll
+*.exe
+*.log
+*.pdb
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+.nuget/
+
+# Rider
+.idea/
+
+# ASP.NET Core files
+appsettings.Development.json
+appsettings.Local.json
+
+# Others
+*.DS_Store
+*.vsix
+_ReSharper*/
+*.cache
+*.bak
+*.swp
+
+# Node/npm (if using frontend tooling)
+node_modules/
+wwwroot/lib/
