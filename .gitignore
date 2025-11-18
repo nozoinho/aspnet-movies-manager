@@ -1,0 +1,14 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio / IDE
+.vs/
+*.user
+*.suo
+*.vscode/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
