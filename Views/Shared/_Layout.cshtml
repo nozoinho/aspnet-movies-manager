@@ -83,6 +83,30 @@
             text-shadow: 0 0 8px #66ccff;
         }
 
+        .profile-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 20px; /* tamaño reducido pero llamativo */
+            margin: 0;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #ffcc00, #ff9900); /* degradado dorado */
+            color: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #ffcc00;
+            box-shadow: 0 0 8px #ffcc00, 0 0 16px rgba(255, 204, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease-in-out;
+            display: inline-block;
+        }
+
+        .profile-heading:hover {
+            background: linear-gradient(135deg, #ffdd33, #ffbb00);
+            box-shadow: 0 0 16px #ffdd33, 0 0 32px rgba(255, 221, 51, 0.5);
+            transform: scale(1.05);
+        }
+ 
+
         .btn-futuristic {
             display: inline-block;
             margin-bottom: 15px;
@@ -140,14 +164,46 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @if (Context.Session.GetString("JWToken") != null)
+                {
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 50px;">
+                        <h4 style="font-family: 'Orbitron', sans-serif; color: #99e6ff; font-weight: bold; margin: 0 0 0 30px;">
+                            @ViewBag.Message
+                        </h4>
+                        <form asp-controller="Login" asp-action="Logout" method="post"
+                            style="max-width: 200px; font-family: 'Orbitron', Arial, sans-serif;
+                                    background: #1a1a1a; padding: 5px; border-radius: 9px;
+                                    color: #e0e0e0;">
+
+                            <button type="submit" class="btn-futuristic-primary">
+                                Sign Out
+                            </button>
+                        </form>
+                    </div>
+                }
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Create"> Add Movie</a>
-                        </li>
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Register"){
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
+                            </li>
+                        }
+                        
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Login"){
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Register" asp-action="Index">Register</a>
+                            </li>
+                        }
+                        
+                        @if (Context.Session.GetString("JWToken") != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Create"> Add Movie</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
