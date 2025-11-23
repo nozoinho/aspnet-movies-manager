@@ -5,8 +5,6 @@
 MovieCatalog is a secure and modern **full-stack web application** built with **ASP.NET Core MVC**, **MongoDB**, and **JWT Authentication**.  
 It allows users to register, log in, and manage their personal movie collection with full CRUD functionality.
 
-This project highlights professional backend engineering practices, authentication workflows, and clean architecture—suitable for showcasing in a software engineering portfolio.
-
 ---
 
 ## 🚀 Features
