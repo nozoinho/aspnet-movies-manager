@@ -26,8 +26,9 @@ public class LoginController : Controller
             return View();
         }
 
-        var token = _jwtService.GenerateToken(existingUser.Username);
+        var token = _jwtService.GenerateToken(existingUser);
         HttpContext.Session.SetString("JWToken", token);
+        HttpContext.Session.SetString("CurrentUsername", existingUser.Username);
         return RedirectToAction("Index", "Movies");
     }
 

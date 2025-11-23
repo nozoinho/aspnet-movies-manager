@@ -4,18 +4,19 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using MongoDB.Bson.IO;
 
 namespace MovieCatalog.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly MovieCatalogContext _context;
+        private readonly MovieService _movieService;
 
         private readonly IConfiguration _configuration;
 
-        public MoviesController(MovieCatalogContext context, IConfiguration configuration)
+        public MoviesController(MovieService movieService, IConfiguration configuration)
         {
-            _context = context;
+            _movieService = movieService;
             _configuration = configuration;
         }
 
@@ -47,19 +48,23 @@ namespace MovieCatalog.Controllers
                     }, out var validatedToken);
 
                     var jwtToken = (JwtSecurityToken)validatedToken;
+                    var userId = jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
                     var username = jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
-                    ViewBag.User = username.ToUpper(); // Siempre en mayúsculas
+                    ViewBag.User = username.ToUpper();
+                    ViewBag.UserId = userId;
                     ViewBag.Message = $"Welcome, {username.ToUpper()}!";
                 }
                 catch
                 {
                     ViewBag.User = null;
+                    ViewBag.UserId = null;
                     ViewBag.Message = "Invalid or expired token.";
                 }
             }
             else
             {
                 ViewBag.User = null;
+                ViewBag.UserId = null;
                 ViewBag.Message = "Unauthorized — Please login.";
             }
         }
@@ -70,7 +75,7 @@ namespace MovieCatalog.Controllers
             SetUserViewBag();
             if (ViewBag.User == null) return RedirectToAction("Index", "Login");
 
-            var movies = _context.Movies.ToList();
+            var movies = _movieService.GetByUser(ViewBag.UserId);
             return View(movies);
         }
 
@@ -91,21 +96,25 @@ namespace MovieCatalog.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Movies.Add(movie);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                movie.UserId = ViewBag.UserId;
+                _movieService.Create(movie);
+                return RedirectToAction("Index", "Movies");
             }
             return View(movie);
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string id)
         {
             SetUserViewBag();
+            var userId = ViewBag.UserId;
             if (ViewBag.User == null) return RedirectToAction("Index", "Login");
 
-            var movie = _context.Movies.Find(id);
-            if (movie == null) return NotFound();
+            var movie = _movieService.Get(id);
+
+            if (movie == null || movie.UserId != userId)
+                return Unauthorized();
+
             return View(movie);
         }
 
@@ -113,41 +122,63 @@ namespace MovieCatalog.Controllers
         public IActionResult Edit(Movie updatedMovie)
         {
             SetUserViewBag();
+            var userId = ViewBag.UserId;
+
             if (ViewBag.User == null) return RedirectToAction("Index", "Login");
 
             if (ModelState.IsValid)
             {
-                _context.Movies.Update(updatedMovie);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+                if (string.IsNullOrEmpty(updatedMovie.Id))
+                {
+                    ModelState.AddModelError("", "Movie ID is missing.");
+                    return View(updatedMovie);
+                }
+
+                var movieInDb = _movieService.Get(updatedMovie.Id);
+
+                if (movieInDb == null || movieInDb.UserId != userId)
+                    return Unauthorized();
+
+                updatedMovie.UserId = movieInDb.UserId;
+                
+                _movieService.Update(updatedMovie.Id!, updatedMovie);
+                return RedirectToAction("Index", "Movies");
             }
             return View(updatedMovie);
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             SetUserViewBag();
+            var userId = ViewBag.UserId;
+
             if (ViewBag.User == null) return RedirectToAction("Index", "Login");
 
-            var movie = _context.Movies.Find(id);
-            if (movie == null) return NotFound();
+            var movie = _movieService.Get(id);
+
+            if (movie == null || movie.UserId != userId)
+                    return Unauthorized();
+
             return View(movie);
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(string id)
         {
             SetUserViewBag();
+            var userId = ViewBag.UserId;
+
             if (ViewBag.User == null) return RedirectToAction("Index", "Login");
 
-            var movie = _context.Movies.Find(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-                _context.SaveChanges();  
-            } 
-            return RedirectToAction("Index");
+            var movie = _movieService.Get(id);
+
+            if (movie == null || movie.UserId != userId)
+                return Unauthorized();
+            
+            _movieService.Remove(id);
+
+            return RedirectToAction("Index", "Movies");
             
         }
         
