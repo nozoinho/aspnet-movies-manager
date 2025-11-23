@@ -1,10 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MovieCatalog.Models
 {
     public class Movie
     {
-        public int Id { get; set; } 
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public String? Id { get; set; } 
 
         [Required]
         public string Title { get; set; } = string.Empty;
@@ -18,5 +22,8 @@ namespace MovieCatalog.Models
         public int Year { get; set; }
 
         public double Rating { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? UserId { get; set; }
     }
 }

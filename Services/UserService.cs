@@ -1,29 +1,41 @@
-using MovieCatalog.Models;
+using MongoDB.Driver;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Linq;
+using MovieCatalog.Models;
+using BCrypt.Net;
 
 namespace MovieCatalog.Services
 {
     public class UserService
     {
-        // Static in-memory list of users
-        private static readonly List<User> _users = new();
+
+        private readonly IMongoCollection<User> _users;
+
+        public UserService(IOptions<MongoSettings> settings)
+        {
+            var client = new MongoClient(settings.Value.ConnectionString);
+            var database = client.GetDatabase(settings.Value.DatabaseName);
+            _users = database.GetCollection<User>(settings.Value.UserCollectionName);
+        }
+
+        public List<User> GetAll() => _users.Find(u => true).ToList();
 
         public bool Register(User user)
         {
-            if (_users.Any(u => u.Username == user.Username))
+            if (_users.Find(u => u.Username == user.Username).Any())
                 return false;
 
-            _users.Add(user);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            _users.InsertOne(user);
             return true;
         }
 
         public User? Authenticate(string username, string password)
         {
-            return _users.FirstOrDefault(u => 
-                u.Username == username && u.Password == password);
-        }
+            var user = _users.Find(u => u.Username == username).FirstOrDefault();
+            if (user == null) return null;
 
-        public List<User> GetAll() => _users;
+            return BCrypt.Net.BCrypt.Verify(password, user.Password) ? user : null;
+        }
     }
 }

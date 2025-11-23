@@ -1,76 +1,102 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieCatalog.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 
 public class MoviesApiController : ControllerBase
 {
+    private readonly MovieService _movieService;
 
-    private readonly MovieCatalogContext _context;
-
-    public MoviesApiController(MovieCatalogContext context)
+    public MoviesApiController(MovieService movieService)
     {
-        _context = context;
+        _movieService = movieService;
     }
 
+    // Helper Token user
+     private string? GetUserIdFromToken()
+    {
+        return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    }
+
+    // GET api/movies
     [HttpGet]
     public ActionResult<IEnumerable<Movie>> GetMovies()
     {
-        var movies = _context.Movies.ToList();
+        var userId = GetUserIdFromToken();
+        if (userId == null) return Unauthorized();
+
+        var movies = _movieService.GetByUser(userId);
         return Ok(movies);
     }
 
-    [HttpGet("{id}")]
+    // GET api/movies/{id}
+    [HttpGet("{id:length(24)}")]
 
-    public ActionResult<Movie> GetMovie(int id)
+    public ActionResult<Movie> GetMovie(string id)
     {
-        var movie = _context.Movies.Find(id);
-        return movie == null ? NotFound() : Ok(movie);
+        var userId = GetUserIdFromToken();
+        if (userId == null) return Unauthorized();
+
+        var movie = _movieService.Get(id);
+
+        if (movie == null || movie.UserId != userId) 
+            return NotFound();
+
+        return Ok(movie);
     }
 
+    // POST api/movies
     [HttpPost]
     public ActionResult<Movie> PostMovie(Movie movie)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        _context.Movies.Add(movie);
-        _context.SaveChanges();
+        var userId = GetUserIdFromToken();
+        if (userId == null) return Unauthorized();
+
+        movie.UserId = userId;
+        _movieService.Create(movie);
 
         return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Put(int id, Movie movie)
+    // PUT api/movies/{id}
+    [HttpPut("{id:length(24)}")]
+    public IActionResult Put(string id, Movie movie)
     {
-        if (id != movie.Id)
-            return BadRequest("Movie ID mismatch");
+        var userId = GetUserIdFromToken();
+        if (userId == null) return Unauthorized();
 
-        var existing = _context.Movies.Find(id);
-        if (existing == null) return NotFound();
+        var existing = _movieService.Get(id);
+        if (existing == null || existing.UserId != userId) return NotFound();
 
-        existing.Title = movie.Title;
-        existing.Director = movie.Director;
-        existing.Genre = movie.Genre;
-        existing.Year = movie.Year;
-        existing.Rating = movie.Rating;
+        movie.Id = id;
+        movie.UserId = userId;
 
-        _context.SaveChanges();
+        _movieService.Update(id, movie);
 
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    // DELETE api/movies/{id}
+    [HttpDelete("{id:length(24)}")]
+    public IActionResult Delete(string id)
     {
-        var movie = _context.Movies.Find(id);
-         if (movie == null) return NotFound();
+        var userId = GetUserIdFromToken();
+        if (userId == null) return Unauthorized();
 
-        _context.Movies.Remove(movie);
-        _context.SaveChanges();  
+        var movie = _movieService.Get(id);
+
+        if (movie == null || movie.UserId != userId) return NotFound();
+
+        _movieService.Remove(id);
 
         return NoContent();
     }
