@@ -3,35 +3,52 @@
     ViewBag.Title = "Register";
 }
 
-<h2 style="font-family: 'Orbitron', sans-serif; color: #99e6ff; font-weight: bold;">
-    Register
-</h2>
+<div class="container d-flex justify-content-center mt-4">
 
-<form asp-action="Index" method="post"
-      style="max-width: 400px; font-family: 'Orbitron', Arial, sans-serif;
-             background: #1a1a1a; padding: 20px; border-radius: 12px;
-             color: #e0e0e0;">
+    <div class="w-100" style="max-width: 420px;">
 
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;">Username</label>
-        <input asp-for="Username"
-               required
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px;
-                      background: #323d4b; color: #e0e0e0;
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);" />
+        <h2 class="text-info fw-bold mb-4 text-center">
+            Register
+        </h2>
+
+        <form asp-action="Index" method="post"
+              class="bg-dark bg-opacity-75 border border-info rounded p-4 shadow">
+
+            <!-- USERNAME -->
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label text-info fw-semibold">
+                    Username
+                </label>
+                <input asp-for="Username"
+                       class="form-control bg-dark text-light border-info"
+                       required />
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label text-info fw-semibold">
+                    Password
+                </label>
+                <input asp-for="Password" type="password"
+                       class="form-control bg-dark text-light border-info"
+                       required />
+            </div>
+
+            <!-- REGISTER BUTTON -->
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-outline-info fw-bold text-uppercase">
+                    Register
+                </button>
+            </div>
+
+        </form>
+
+        <!-- ERROR MESSAGE -->
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <p class="text-danger fw-bold text-center mt-3">
+                @ViewBag.Error
+            </p>
+        }
     </div>
-
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;">Password</label>
-        <input asp-for="Password" type="password" required
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px;
-                      background: #323d4b; color: #e0e0e0;
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);" />
-    </div>
-
-    <button type="submit" class="btn-futuristic-primary">
-        Register
-    </button>
-</form>
-
-<p style="color:#ff4c4c; margin-top:15px;">@ViewBag.Error</p>
+</div>

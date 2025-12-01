@@ -2,89 +2,64 @@
 @using Microsoft.AspNetCore.Http
 
 @{
-    ViewBag.Title = "Profile";
+    ViewBag.Title = "Movies";
 }
 
-<h2 style="font-family: 'Orbitron'; text-align: center; sans-serif; color: #99e6ff; font-weight: bold;">
-    Movie List
-</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-center text-info fw-bold" style="font-family: 'Orbitron'; flex:1;">
+        @ViewBag.User's Movie Catalog
+    </h2>
 
-<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-    <a href="/Movies/Create" class="btn-futuristic">
+    <a asp-controller="Movies" asp-action="Create" class="btn btn-outline-success fw-bold text-uppercase" role="button">
         Add New Movie
     </a>
-    <h2 class="profile-heading">
-        @ViewBag.User's Profile
-    </h2>
 </div>
 
-<style>
-    body {
-        font-family: 'Orbitron', sans-serif;
-        color: #e0e0e0;
-    }
-
-    .futuristic-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        background: rgba(20, 20, 20, 0.95);
-        border: 1px solid #333;
-    }
-
-    .futuristic-table th, 
-    .futuristic-table td {
-        padding: 12px 15px;
-        text-align: center;
-        border: 1px solid #333;
-    }
-
-    .futuristic-table th {
-        background: #1a1a1a;
-        color: #66ccff;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: bold;
-        font-size: 16px;
-    }
-
-    .futuristic-table tr {
-        transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-    .futuristic-table tr:nth-child(even) {
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .futuristic-table tr:hover {
-        background: rgba(102, 204, 255, 0.15);
-        transform: scale(1.02);
-    }
-</style>
-
-<table class="futuristic-table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Director</th>
-            <th>Genre</th>
-            <th>Year</th>
-            <th>Rating</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var movie in Model)
-        {
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info text-center fw-bold" role="alert" style="font-family: 'Orbitron';">
+        No movies found. <br />
+        Click <strong>Add New Movie</strong> to start your catalog.
+    </div>
+}
+else
+{
+    <table class="table table-dark table-striped table-hover text-center align-middle">
+        <thead class="table-info text-uppercase">
             <tr>
-                <td>@movie.Title</td>
-                <td>@movie.Director</td>
-                <td>@movie.Genre</td>
-                <td>@movie.Year</td>
-                <td>@movie.Rating</td>
-                <td><a style="font-family: 'Orbitron', sans-serif; font-weight: bold; color: #66ccff;" href="/Movies/Edit/@movie.Id">EDIT</a></td>
-                <td><a style="font-family: 'Orbitron', sans-serif; font-weight: bold; color: #66ccff;" href="/Movies/Delete/@movie.Id">DELETE</a></td>
+                <th>Title</th>
+                <th>Director</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Rating</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td>@movie.Director</td>
+                    <td>@movie.Genre</td>
+                    <td>@movie.Year</td>
+                    <td>@movie.Rating</td>
+                    <td>
+                        <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id"
+                        class="btn btn-sm btn-outline-warning fw-bold text-uppercase">
+                        Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id"
+                        class="btn btn-sm btn-outline-danger fw-bold text-uppercase">
+                        Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+}
