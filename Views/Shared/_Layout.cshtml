@@ -5,227 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MovieCatalog</title>
 
-    <!-- Google Font: Orbitron -->
+    <!-- Orbitron Font -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
 
-    <!-- Site CSS -->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MovieCatalog.styles.css" asp-append-version="true" />
-
+    <!-- Minimal CSS just for global font + background -->
     <style>
         body {
             font-family: 'Orbitron', sans-serif;
-            background: radial-gradient(circle at 20% 20%, #0d0d0d, #1a1a1a 60%, #000);
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background: linear-gradient(90deg, #0d0d0d 0%, #1a1a1a 50%, #0d0d0d 100%);
-            border-bottom: 2px solid #66ccff;
-            box-shadow: 0 0 15px rgba(102, 204, 255, 0.3);
-        }
-
-        .navbar-brand {
-            color: #66ccff !important;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #66ccff;
-        }
-
-        .navbar-brand:hover {
-            color: #99e6ff !important;
-        }
-
-        .navbar-nav .nav-link {
-            color: #e0e0e0 !important;
-            font-weight: 500;
-            transition: color 0.3s, text-shadow 0.3s;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #66ccff !important;
-            text-shadow: 0 0 8px #66ccff;
-        }
-
-        main {
-            flex: 1;
-            padding: 30px;
-            background: rgba(10, 10, 10, 0.85);
-            border: 1px solid rgba(102, 204, 255, 0.15);
-            border-radius: 12px;
-            box-shadow: 0 0 25px rgba(102, 204, 255, 0.05);
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-
-        footer {
-            text-align: center;
             background: #0d0d0d;
-            color: #66ccff;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        footer a {
-            color: #99e6ff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 8px #66ccff;
-        }
-
-        .profile-heading {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 20px; /* tamaño reducido pero llamativo */
-            margin: 0;
-            padding: 6px 12px;
-            background: linear-gradient(135deg, #ffcc00, #ff9900); /* degradado dorado */
-            color: #1a1a1a;
-            border-radius: 8px;
-            border: 1px solid #ffcc00;
-            box-shadow: 0 0 8px #ffcc00, 0 0 16px rgba(255, 204, 0, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease-in-out;
-            display: inline-block;
-        }
-
-        .profile-heading:hover {
-            background: linear-gradient(135deg, #ffdd33, #ffbb00);
-            box-shadow: 0 0 16px #ffdd33, 0 0 32px rgba(255, 221, 51, 0.5);
-            transform: scale(1.05);
-        }
- 
-
-        .btn-futuristic {
-            display: inline-block;
-            margin-bottom: 15px;
-            padding: 10px 20px;
-            background-color: #0d0d0d;
-            color: #00e5ff;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            border: 1px solid #00e5ff;
-            box-shadow: 0 0 8px #00e5ff;
-            transition: all 0.3s ease-in-out;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .btn-futuristic:hover {
-            background-color: #00e5ff;
-            color: #0d0d0d;
-            box-shadow: 0 0 20px #00e5ff, 0 0 40px #00e5ff;
-            transform: scale(1.05);
-        }
-
-        .btn-futuristic-primary {
-            display: inline-block;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #00b4d8, #0077b6);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Hover effect */
-        .btn-futuristic-primary:hover {
-            background: linear-gradient(135deg, #00e5ff, #00b4d8);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.6), 0 0 40px rgba(0, 229, 255, 0.2);
-            transform: scale(1.05);
-            color: #001018;
         }
     </style>
 </head>
-<body>
+
+<body class="text-light">
+
+    <!-- NAVBAR -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-info shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Movies" asp-action="Index">MovieCatalog</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+
+                <!-- Brand with optional icon -->
+                <a class="navbar-brand d-flex align-items-center gap-2" 
+                   asp-controller="Movies" asp-action="Index">
+                    <span class="text-info fw-bold">MovieCatalog</span>
+                </a>
+
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @if (Context.Session.GetString("JWToken") != null)
-                {
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 50px;">
-                        <h4 style="font-family: 'Orbitron', sans-serif; color: #99e6ff; font-weight: bold; margin: 0 0 0 30px;">
-                            @ViewBag.Message
-                        </h4>
-                        <form asp-controller="Login" asp-action="Logout" method="post"
-                            style="max-width: 200px; font-family: 'Orbitron', Arial, sans-serif;
-                                    background: #1a1a1a; padding: 5px; border-radius: 9px;
-                                    color: #e0e0e0;">
 
-                            <button type="submit" class="btn-futuristic-primary">
-                                Sign Out
-                            </button>
-                        </form>
-                    </div>
-                }
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <ul class="navbar-nav">
-                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Register"){
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
-                            </li>
-                        }
-                        
-                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Login"){
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Register" asp-action="Index">Register</a>
-                            </li>
-                        }
-                        
-                        @if (Context.Session.GetString("JWToken") != null)
+                <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+
+                        @* Login/Register switching *@
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Register")
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Index">Home</a>
+                                <a class="nav-link text-light" asp-controller="Login" asp-action="Index">
+                                    Login
+                                </a>
                             </li>
+                        }
+
+                        @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Login")
+                        {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Movies" asp-action="Create"> Add Movie</a>
+                                <a class="nav-link text-light" asp-controller="Register" asp-action="Index">
+                                    Register
+                                </a>
+                            </li>
+                        }
+
+                        @* Authenticated links *@
+                        @if (Context.Session.GetString("JWToken") != null)
+                        {
+                            <li class="nav-item me-2">
+                                <a class="btn btn-outline-info fw-bold text-uppercase" 
+                                asp-controller="Movies" asp-action="Index" 
+                                role="button" style="font-family: 'Orbitron';">
+                                Home
+                                </a>
+                            </li>
+                            <li class="nav-item me-2">
+                                <a class="btn btn-outline-light fw-bold text-uppercase" 
+                                asp-controller="Movies" asp-action="Create" 
+                                role="button">
+                                Add Movie
+                                </a>
                             </li>
                         }
                     </ul>
+
+                    @* User Message + Sign Out *@
+                    @if (Context.Session.GetString("JWToken") != null)
+                    {
+                        <div class="d-flex align-items-center ms-4">
+                            <span class="text-info fw-bold me-3">@ViewBag.Message</span>
+
+                            <form asp-controller="Login" asp-action="Logout" method="post">
+                                <button type="submit" 
+                                        class="btn btn-outline-info fw-bold text-uppercase">
+                                    Sign Out
+                                </button>
+                            </form>
+                        </div>
+                    }
+
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <!-- CONTENT -->
+    <div class="container my-4">
+        <main class="bg-dark bg-opacity-75 p-4 rounded border border-info shadow">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer">
-        <div class="container">
-            &copy; 2025 - <strong>MovieCatalog</strong>
-        </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-info text-center py-3 border-top border-info mt-auto">
+        &copy; 2025 – <strong>MovieCatalog</strong>
     </footer>
 
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

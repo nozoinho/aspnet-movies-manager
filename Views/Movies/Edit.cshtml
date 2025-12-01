@@ -1,64 +1,49 @@
 @model MovieCatalog.Models.Movie
 
-<h2 style="font-family: 'Orbitron', sans-serif; color: #99e6ff; font-weight: bold;">
+@{
+    ViewBag.Title = "Edit Movie";
+}
+
+<h2 class="text-center text-warning fw-bold mb-4" style="font-family: 'Orbitron';">
     Edit Movie
 </h2>
 
-<form asp-action="Edit" method="post" 
-        style="max-width: 400px; font-family: 'Orbitron', Arial, sans-serif; 
-            background: #1a1a1a; padding: 20px; border-radius: 12px; 
-            color: #e0e0e0;">
-            
-    <input type="hidden" asp-for="Id" />
-    <div style="margin-bottom: 15px;">
-        <label asp-for="Title" style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;"></label>
-        <input asp-for="Title" 
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px; 
-                      background: #323d4b; color: #e0e0e0; 
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);"/>
-        <span asp-validation-for="Title" style="color: #ff4c4c; font-size: 0.9em;"></span>
+<form asp-action="Edit" method="post" class="mx-auto p-4 bg-dark border border-warning rounded" style="max-width: 450px; font-family: 'Orbitron';">
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label text-warning fw-bold"></label>
+        <input asp-for="Title" class="form-control bg-dark text-light border border-warning" />
+        <span asp-validation-for="Title" class="text-danger small"></span>
     </div>
 
-    <div style="margin-bottom: 15px;">
-        <label asp-for="Director" style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;"></label>
-        <input asp-for="Director" 
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px; 
-                      background: #323d4b; color: #e0e0e0; 
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);"/>
-        <span asp-validation-for="Director" style="color: #ff4c4c; font-size: 0.9em;"></span>
+    <div class="mb-3">
+        <label asp-for="Director" class="form-label text-warning fw-bold"></label>
+        <input asp-for="Director" class="form-control bg-dark text-light border border-warning" />
+        <span asp-validation-for="Director" class="text-danger small"></span>
     </div>
 
-    <div style="margin-bottom: 15px;">
-        <label asp-for="Genre" style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;"></label>
-        <input asp-for="Genre" 
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px; 
-                      background: #323d4b; color: #e0e0e0; 
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);"/>
-        <span asp-validation-for="Genre" style="color: #ff4c4c; font-size: 0.9em;"></span>
+    <div class="mb-3">
+        <label asp-for="Genre" class="form-label text-warning fw-bold"></label>
+        <input asp-for="Genre" class="form-control bg-dark text-light border border-warning" />
+        <span asp-validation-for="Genre" class="text-danger small"></span>
     </div>
 
-    <div style="margin-bottom: 15px;">
-        <label asp-for="Year" style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;"></label>
-        <input asp-for="Year" 
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px; 
-                      background: #323d4b; color: #e0e0e0; 
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);"/>
+    <div class="mb-3">
+        <label asp-for="Year" class="form-label text-warning fw-bold"></label>
+        <input asp-for="Year" class="form-control bg-dark text-light border border-warning" />
     </div>
 
-    <div style="margin-bottom: 15px;">
-        <label asp-for="Rating" style="display: block; font-weight: 600; margin-bottom: 6px; color: #66ccff;"></label>
-        <input asp-for="Rating" 
-               style="width: 100%; padding: 10px; border: none; border-radius: 6px; 
-                      background: #323d4b; color: #e0e0e0; 
-                      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);"/>
+    <div class="mb-3">
+        <label asp-for="Rating" class="form-label text-warning fw-bold"></label>
+        <input asp-for="Rating" class="form-control bg-dark text-light border border-warning" />
     </div>
 
-    <button type="submit" 
-            style="padding: 10px 18px; background: linear-gradient(135deg, #00b4d8, #0077b6); 
-                   color: #fff; border: none; border-radius: 6px; cursor: pointer; 
-                   font-weight: 600; transition: background 0.3s ease;">
-        Save
+    <button type="submit" class="btn btn-warning fw-bold text-uppercase w-100">
+        Save Changes
     </button>
+
+    <a asp-action="Index" class="btn btn-secondary fw-bold text-uppercase w-100 my-2">
+        Cancel
+    </a>
 </form>
 
 @section Scripts {
