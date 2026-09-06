@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# .NET build output
+bin/
+obj/
+
+# Visual Studio / Rider / IDE files
+.vs/
+.idea/
+*.user
+*.suo
+
+# Local database files
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log
+
+# Local environment / secrets
+.env
+.env.*
+secrets.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation not needed in the image
+README.md

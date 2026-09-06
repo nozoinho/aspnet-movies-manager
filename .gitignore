@@ -38,3 +38,6 @@ _ReSharper*/
 # Node/npm (if using frontend tooling)
 node_modules/
 wwwroot/lib/
+
+.env
+.env.*
